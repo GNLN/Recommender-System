@@ -1,0 +1,9 @@
+{
+    "path" : "~/Expedia",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun May 21 09:11:27 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-015c-2b22-4da3-00000c759980 
+on database directory C:\Users\gnln\Desktop\Big Data Project\Demo Product\Product 2\Expedia\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@114acf0a 
+Loaded from file:/C:/spark/jars/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=C:\Users\gnln\Desktop\Big Data Project\Demo Product\Product 2\Expedia
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

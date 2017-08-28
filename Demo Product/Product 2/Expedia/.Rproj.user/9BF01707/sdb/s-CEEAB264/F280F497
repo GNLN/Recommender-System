@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#install.packages(\"faraway\")\n#install.packages(\"sparklyr\")\n#install.packages(\"party\")\n#*****note required******\nlibrary(sparklyr)\nspark_install(version = \"1.6.2\")\nsc <- spark_connect(master = \"local\")\n#************************\nlibrary(faraway)\nlibrary(shiny)\nlibrary(dplyr)\nlibrary(randomForest)\nlibrary(party)\ndata(\"mtcars\")\n\n\n#predictions <- predict(model, ex)\n\n#select(predictions, hotel_cluster, prediction)\n\n\n#if (nchar(Sys.getenv(\"SPARK_HOME\")) < 1) {\n  #Sys.setenv(SPARK_HOME = \"/home/sathya/BigData/spark-1.6.1-bin-hadoop1\")\n#}\n#library(SparkR, lib.loc = c(file.path(Sys.getenv(\"SPARK_HOME\"), \"R\", \"lib\")))\n##sparkR.session(master = \"local[*]\", sparkConfig = list(spark.driver.memory = \"2g\"))\n#sc <- sparkR.init(master = \"local[*]\", sparkEnvir = list(spark.driver.memory = \"5g\"))\n#sqlContext <- sparkRSQL.init(sc)\n\n\nexpedia <- read.csv(file=\"/home/sathya/Downloads/sampled_train.csv\",head=TRUE,sep=\",\")\nexpedia$date_time <- NULL\n#expedia_df <- createDataFrame(sqlContext, expedia)\n#printSchema(expedia_df)\n#SparkR::head(expedia_df)\n\nexpedia$hotel_cluster <- as.factor(expedia$hotel_cluster)\n\n\nex <- copy_to(sc, expedia, overwrite = TRUE)\n\nml_formula <- formula(hotel_cluster~ site_name+ posa_continent+user_location_country+is_booking)\n\n(model <- ml_random_forest(ex, ml_formula))\n\n\n#spark_model <- glm(expedia_df, hotel_cluster ~ is_booking+site_name+posa_continent+user_location_country, maxIter = 10, regParam = 0.3, elasticNetParam = 0.8)\n###model <- randomForest(hotel_cluster ~ site_name + posa_continent + user_location_country + is_booking, data = expedia,  ntree=5, keep.forest=FALSE, importance=TRUE)\n\n#model <- spark.randomForest(expedia_df, hotel_cluster ~ site_name + posa_continent + user_location_country + is_booking, type = \"regression\", maxDepth = 5, maxBins = 16)\n\nmpgPredict <- function(site_name, posa_continent, user_location_country, is_booking)\n{\n    test <- data.frame(site_name, posa_continent, user_location_country,is_booking)\n    ex1 <- copy_to(sc,test , overwrite = TRUE)\n    predict(model, ex1)[1]\n}\n  \nshinyServer(\n  function(input, output){\n    output$site_name <- renderPrint({input$site_name})\n    output$posa_continent <- renderPrint({input$posa_continent})\n    output$user_location_country <- renderPrint({input$user_location_country})\n    output$is_booking <- renderPrint({input$is_booking})\n    output$prediction <- renderPrint({mpgPredict(as.numeric(input$site_name), \n                                                 input$posa_continent, input$user_location_country,\n                                                 input$is_booking)})\n    #pred <- mpgPredict(as.numeric(input$site_name), input$posa_continent, input$user_location_country,input$is_booking)\n    #maxclass -> which.max(pred)\n    #output$prediction <- renderPrint({maxclass})\n  }\n)",
+    "created" : 1495209567374.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3232906358",
+    "id" : "F280F497",
+    "lastKnownWriteTime" : 1495340000,
+    "last_content_update" : 1495340000007,
+    "path" : "~/Expedia/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
